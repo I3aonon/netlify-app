@@ -2,43 +2,7 @@
 
 // Sample checkout data (in real app, this would come from cart)
 const checkoutData = {
-  items: [
-    {
-      id: "item1",
-      name: "Bao coffee Xoài Đào",
-      price: 59000,
-      quantity: 1,
-      image: "https://via.placeholder.com/50x50/FFB6C1/FFFFFF?text=PXD",
-    },
-    {
-      id: "item2",
-      name: "Americano Nóng Đen",
-      price: 39000,
-      quantity: 2,
-      image: "https://via.placeholder.com/50x50/8B4513/FFFFFF?text=AND",
-    },
-    {
-      id: "item3",
-      name: "Trà Sữa Matcha Trà Xanh",
-      price: 55000,
-      quantity: 1,
-      image: "https://via.placeholder.com/50x50/90EE90/FFFFFF?text=TSM",
-    },
-    {
-      id: "item4",
-      name: "Bao coffee Choco",
-      price: 45000,
-      quantity: 1,
-      image: "https://via.placeholder.com/50x50/D2B48C/FFFFFF?text=PC",
-    },
-    {
-      id: "item5",
-      name: "BINH GIỮ NHIỆT HÓA TIẾT LÁ CÀ PHÊ MÀU NÂU 710ML",
-      price: 149000,
-      quantity: 1,
-      image: "https://via.placeholder.com/50x50/8B4513/FFFFFF?text=BGN",
-    },
-  ],
+  items: [],
   promoCode: "",
   discount: 0,
   shippingFee: 0,
@@ -323,21 +287,21 @@ function initCheckout() {
 // Load cart data from localStorage if available
 function loadCartData() {
   const savedCart = localStorage.getItem("cart");
+
   if (savedCart) {
     try {
       const cartItems = JSON.parse(savedCart);
-      if (cartItems.length > 0) {
-        checkoutData.items = cartItems.map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image:
-            item.image || "https://via.placeholder.com/50x50/ccc/fff?text=IMG",
-        }));
-      }
+
+      checkoutData.items = cartItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+        size: item.size || "M" // ✅ FIX SIZE
+      }));
     } catch (e) {
-      console.log("Error loading cart data:", e);
+      console.log("Error loading cart:", e);
     }
   }
 }

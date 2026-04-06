@@ -19,84 +19,84 @@ document.addEventListener("DOMContentLoaded", function () {
   const allProducts = [
     // Coffee products
     {
-      id: 1,
+      id: 101,
       name: "Phin Sữa Đá",
       price: 29000,
       category: "coffee",
       image: "./public/c1.jpg",
     },
     {
-      id: 2,
-      name: "Phin Đen Đá",
-      price: 25000,
-      category: "coffee",
-      image: "./public/c3.jpg",
-    },
-    {
-      id: 3,
+      id: 102,
       name: "Bạc Sỉu Đá",
       price: 29000,
       category: "coffee",
       image: "./public/c2.jpg",
     },
     {
-      id: 4,
-      name: "Latte Đá",
-      price: 45000,
+      id: 103,
+      name: "Phin Đen Đá",
+      price: 25000,
       category: "coffee",
-      image: "./public/c4.jpg",
+      image: "./public/c3.jpg",
     },
     {
-      id: 5,
-      name: "Caramel Macchiato",
-      price: 55000,
-      category: "coffee",
-      image: "./public/c6.jpg",
-    },
-    {
-      id: 6,
+      id: 104,
       name: "Cappuccino",
       price: 45000,
       category: "coffee",
       image: "./public/c4.jpg",
     },
     {
-      id: 7,
+      id: 105,
       name: "Americano",
-      price: 39000,
+      price: 45000,
       category: "coffee",
       image: "./public/c5.jpg",
     },
     {
-      id: 8,
-      name: "Phin Sữa Nóng",
-      price: 29000,
+      id: 106,
+      name: "Caramel Macchiato",
+      price: 69000,
       category: "coffee",
-      image: "./public/c1.jpg",
+      image: "./public/c6.jpg",
     },
     {
-      id: 9,
-      name: "Phin Đen Nóng",
+      id: 107,
+      name: "Café Hạnh Nhân",
+      price: 45000,
+      category: "coffee",
+      image: "./public/c7.jpg",
+    },
+    {
+      id: 108,
+      name: "Café Choco",
+      price: 45000,
+      category: "coffee",
+      image: "./public/c8.jpg",
+    },
+    {
+      id: 109,
+      name: "Café Kem Sữa",
       price: 25000,
       category: "coffee",
-      image: "./public/c3.jpg",
+      image: "./public/c9.jpg",
     },
     {
-      id: 10,
-      name: "Bạc Xỉu Nóng",
-      price: 29000,
+      id: 110,
+      name: "Mocha Đá",
+      price: 69000,
       category: "coffee",
-      image: "./public/c2.jpg",
+      image: "./public/c10.jpg",
     },
     {
-      id: 11,
+      id: 111,
       name: "Mocha Nóng",
       price: 49000,
       category: "coffee",
       image: "./public/c6.jpg",
     },
     {
-      id: 12,
+      id: 112,
       name: "Latte Nóng",
       price: 45000,
       category: "coffee",
@@ -105,28 +105,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Tea products
     {
-      id: 13,
+      id: 301,
       name: "Trà Sen Vàng",
       price: 45000,
       category: "tea",
       image: "./public/t1.jpg",
     },
     {
-      id: 14,
+      id: 114,
       name: "Trà Xanh Đậu Đỏ",
       price: 39000,
       category: "tea",
       image: "./public/t2.jpg",
     },
     {
-      id: 15,
+      id: 115,
       name: "Trà Ô Long",
       price: 35000,
       category: "tea",
       image: "./public/t3.jpg",
     },
     {
-      id: 16,
+      id: 116,
       name: "Trà Sữa Thái",
       price: 49000,
       category: "tea",
@@ -135,21 +135,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Freeze products
     {
-      id: 17,
+      id: 117,
       name: "Freeze Trà Xanh",
       price: 55000,
       category: "freeze",
       image: "./public/t5.jpg",
     },
     {
-      id: 18,
+      id: 118,
       name: "Freeze Chocolate",
       price: 59000,
       category: "freeze",
       image: "./public/t6.jpg",
     },
     {
-      id: 19,
+      id: 119,
       name: "Freeze Caramel",
       price: 59000,
       category: "freeze",
@@ -158,25 +158,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Food products
     {
-      id: 20,
-      name: "Bánh Mì Thịt Nướng",
-      price: 35000,
+      id: 401,
+      name: "Bánh Mì Que Pate",
+      price: 19000,
+      category: "food",
+      image: "./public/b1.png",
+    },
+    {
+      id: 402,
+      name: "Bánh Mì Que Cà Phê Mai",
+      price: 19000,
+      category: "food",
+      image: "./public/b2.png",
+    },
+    {
+      id: 403,
+      name: "Bánh Mì Que Bơ Xôi Phô Mai",
+      price: 25000,
+      category: "food",
+      image: "./public/b3.png",
+    },
+    {
+      id: 404,
+      name: "Bánh Su Kem",
+      price: 29000,
       category: "food",
       image: "./public/img1.jpg",
     },
     {
-      id: 21,
-      name: "Bánh Croissant",
-      price: 25000,
+      id: 405,
+      name: "Bánh Sữa Chua Phô Mai",
+      price: 39000,
       category: "food",
       image: "./public/img2.jpg",
-    },
-    {
-      id: 22,
-      name: "Salad Gà",
-      price: 65000,
-      category: "food",
-      image: "./public/img3.jpg",
     },
   ];
 
@@ -272,7 +286,16 @@ document.addEventListener("DOMContentLoaded", function () {
   function createProductCard(product) {
     const card = document.createElement("div");
     card.className = "product-card";
-    card.onclick = () => goToProductDetail(product.id);
+    card.onclick = () => {
+      console.log("CLICK ID:", product.id);
+
+      if (!product.id) {
+        console.error("ID bị undefined!", product);
+        return;
+      }
+
+      goToProductDetail(product.id);
+    };
 
     const badgeHtml = product.badge
       ? `<div class="product-badge">${product.badge}</div>`

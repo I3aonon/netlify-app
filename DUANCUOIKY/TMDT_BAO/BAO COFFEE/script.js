@@ -1,9 +1,31 @@
+if (window.location.pathname.includes("product-detail")) {
+  console.log("Skip global addToCart");
+} else {
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".btn-add-cart")) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const productCard = e.target.closest(".product-card");
+      if (!productCard) return; // ✅ CHẶN LỖI
+
+      const productId = productCard.dataset.productId;
+
+      const product = getProductById(productId);
+
+      if (product) {
+        cart.addItem(product.id, product);
+      }
+    }
+  });
+}
+
 // Mock data for tea and freeze products
 const teaFreezeData = [
   {
     id: "tea1",
     name: "Trà Sen Vàng (Sen)",
-    category: "Bao coffee",
+    category: "Café",
     price: 45000,
     originalPrice: null,
     image: "./public/t1.jpg",
@@ -16,7 +38,7 @@ const teaFreezeData = [
   {
     id: "tea2",
     name: "Trà Sen Vàng (Sen)",
-    category: "Bao coffee",
+    category: "Café",
     price: 45000,
     originalPrice: null,
     image: "./public/t2.jpg",
@@ -29,7 +51,7 @@ const teaFreezeData = [
   {
     id: "tea3",
     name: "Trà Thanh Đào",
-    category: "Bao coffee",
+    category: "Café",
     price: 45000,
     originalPrice: null,
     image: "./public/t3.jpg",
@@ -42,7 +64,7 @@ const teaFreezeData = [
   {
     id: "tea4",
     name: "Trà Thanh Đào",
-    category: "Bao coffee",
+    category: "Café",
     price: 45000,
     originalPrice: null,
     image: "./public/t4.jpg",
@@ -54,7 +76,7 @@ const teaFreezeData = [
   {
     id: "tea5",
     name: "Trà Thạch Vải",
-    category: "Bao coffee",
+    category: "Café",
     price: 45000,
     originalPrice: null,
     image: "./public/t5.jpg",
@@ -67,7 +89,7 @@ const teaFreezeData = [
   {
     id: "tea6",
     name: "Trà Xanh Rắn Đỏ",
-    category: "Bao coffee",
+    category: "Café",
     price: 45000,
     originalPrice: null,
     image: "./public/t6.jpg",
@@ -80,7 +102,7 @@ const teaFreezeData = [
   {
     id: "tea7",
     name: "Freeze Trà Xanh",
-    category: "Bao coffee",
+    category: "Café",
     price: 55000,
     originalPrice: null,
     image: "./public/t7.jpg",
@@ -93,7 +115,7 @@ const teaFreezeData = [
   {
     id: "tea8",
     name: "Trà Ngọc Trai Dâu Tằm",
-    category: "Bao coffee",
+    category: "Café",
     price: 59000,
     originalPrice: null,
     image: "./public/t8.jpg",
@@ -105,7 +127,7 @@ const teaFreezeData = [
   {
     id: "tea9",
     name: "Cookies & Cream",
-    category: "Bao coffee",
+    category: "Café",
     price: 55000,
     originalPrice: null,
     image: "./public/t9.jpg",
@@ -118,7 +140,7 @@ const teaFreezeData = [
   {
     id: "tea10",
     name: "Freeze Kem Mây Dâu Tằm",
-    category: "Bao coffee",
+    category: "Café",
     price: 55000,
     originalPrice: null,
     image: "./public/t10.jpg",
@@ -135,27 +157,27 @@ const newsData = [
     id: "news1",
     title: "KHOE SẮC THÁNG HƯƠNG - TRÀ SEN VÀNG (MỚI) ĐÃ CÓ MẶT",
     image: "./public/tt1.png",
-    source: "Bao coffee E-commerce Web",
+    source: "Café E-commerce Web",
     date: "Thứ 2, 25/03/2026",
     excerpt:
-      "Trà Sen Vàng mới với hương vị đặc biệt đã chính thức có mặt tại Bao coffee...",
+      "Trà Sen Vàng mới với hương vị đặc biệt đã chính thức có mặt tại Café...",
     content: "Nội dung chi tiết bài viết về Trà Sen Vàng...",
   },
   {
     id: "news2",
-    title: "Bao coffee CASSIA - QUÊ ẤM Bao coffee EM, PHONG VỊ ĐỘC ĐÁO",
+    title: "Café CASSIA - QUÊ ẤM Café EM, PHONG VỊ ĐỘC ĐÁO",
     image: "./public/tt2.png",
-    source: "Bao coffee E-commerce Web",
+    source: "Café E-commerce Web",
     date: "Thứ 2, 25/03/2026",
     excerpt:
-      "Bao coffee Cassia với hương quế ấm áp, mang đến trải nghiệm cà phê hoàn toàn mới...",
-    content: "Nội dung chi tiết bài viết về Bao coffee Cassia...",
+      "Café Cassia với hương quế ấm áp, mang đến trải nghiệm cà phê hoàn toàn mới...",
+    content: "Nội dung chi tiết bài viết về Café Cassia...",
   },
   {
     id: "news3",
     title: "CHILL HÈ MALDIVES - 100% TRÚNG VOUCHER",
     image: "./public/tt3.png",
-    source: "Bao coffee E-commerce Web",
+    source: "Café E-commerce Web",
     date: "Thứ 2, 25/03/2026",
     excerpt:
       "Chương trình khuyến mãi hè với cơ hội trúng voucher 100% khi mua đồ uống...",
@@ -163,14 +185,14 @@ const newsData = [
   },
   {
     id: "news4",
-    title: "CHILL HÈ CÙNG Bao coffee! THÀNH MẬT ĐẦU TÂM, THƯỞNG THỨC NGAY!",
+    title: "CHILL HÈ CÙNG Café! THÀNH MẬT ĐẦU TÂM, THƯỞNG THỨC NGAY!",
     image: "./public/tt4.jpg",
-    source: "Bao coffee E-commerce Web",
+    source: "Café E-commerce Web",
     date: "Thứ 2, 25/03/2026",
     excerpt:
-      "Mùa hè này, hãy cùng Bao coffee thưởng thức những món đồ uống mát lạnh...",
+      "Mùa hè này, hãy cùng Café thưởng thức những món đồ uống mát lạnh...",
     content:
-      "Nội dung chi tiết bài viết về chương trình Chill hè cùng Bao coffee...",
+      "Nội dung chi tiết bài viết về chương trình Chill hè cùng Café...",
   },
 ];
 
@@ -180,8 +202,8 @@ const mockData = {
   flashSale: [
     {
       id: "fs1",
-      name: "LY GIỮ NHIỆT Bao coffee",
-      category: "Bao coffee",
+      name: "LY GIỮ NHIỆT Café",
+      category: "Café",
       currentPrice: 349000,
       originalPrice: 529000,
       discount: 34,
@@ -192,7 +214,7 @@ const mockData = {
     {
       id: "fs2",
       name: "CÀ PHÊ HÒA TAN 3 TRONG 1 THƠM NGON",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 179000,
       originalPrice: 199000,
       discount: 10,
@@ -203,7 +225,7 @@ const mockData = {
     {
       id: "fs3",
       name: "BÌNH GIỮ NHIỆT HOA TIẾT LÁ CÀ PHÊ",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 499000,
       originalPrice: 529000,
       discount: 6,
@@ -214,7 +236,7 @@ const mockData = {
     {
       id: "fs4",
       name: "BÌNH GIỮ NHIỆT LOGO MÀU NÂNG",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 499000,
       originalPrice: 520000,
       discount: 4,
@@ -224,8 +246,8 @@ const mockData = {
     },
     {
       id: "fs5",
-      name: "LY GIỮ NHIỆT Bao coffee",
-      category: "Bao coffee",
+      name: "LY GIỮ NHIỆT Café",
+      category: "Café",
       currentPrice: 349000,
       originalPrice: 499000,
       discount: 30,
@@ -236,7 +258,7 @@ const mockData = {
     {
       id: "fs6",
       name: "BÌNH NHÁM GIỮ NHIỆT LOGO",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 349000,
       originalPrice: 439000,
       discount: 21,
@@ -247,7 +269,7 @@ const mockData = {
     {
       id: "fs7",
       name: "BÌNH NHÁM GIỮ NHIỆT LOGO",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 349000,
       originalPrice: 439000,
       discount: 21,
@@ -258,7 +280,7 @@ const mockData = {
     {
       id: "fs8",
       name: "LY THỦY TINH ỐNG HÚT HOA",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 299000,
       originalPrice: 439000,
       discount: 32,
@@ -269,7 +291,7 @@ const mockData = {
     {
       id: "fs9",
       name: "LY THỦY TINH ỐNG HÚT HOA",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 289000,
       originalPrice: 329000,
       discount: 12,
@@ -280,7 +302,7 @@ const mockData = {
     {
       id: "fs10",
       name: "CÀ PHÊ HÒA TAN 3 TRONG 1",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 75000,
       originalPrice: 163000,
       discount: 54,
@@ -290,8 +312,8 @@ const mockData = {
     },
     {
       id: "fs11",
-      name: "BÌNH GIỮ NHIỆT Bao coffee XANH LÁ",
-      category: "Bao coffee",
+      name: "BÌNH GIỮ NHIỆT Café XANH LÁ",
+      category: "Café",
       currentPrice: 399000,
       originalPrice: 529000,
       discount: 25,
@@ -302,7 +324,7 @@ const mockData = {
     {
       id: "fs12",
       name: "LY THỦY TINH ỐNG HÚT VÀNG",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 259000,
       originalPrice: 329000,
       discount: 21,
@@ -313,7 +335,7 @@ const mockData = {
     {
       id: "fs13",
       name: "BÌNH GIỮ NHIỆT HOA TIẾT ĐỎ",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 449000,
       originalPrice: 529000,
       discount: 15,
@@ -324,7 +346,7 @@ const mockData = {
     {
       id: "fs14",
       name: "LY GIỮ NHIỆT MÀU CAM",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 319000,
       originalPrice: 399000,
       discount: 20,
@@ -335,7 +357,7 @@ const mockData = {
     {
       id: "fs15",
       name: "CÀ PHÊ HÒA TAN PREMIUM",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 199000,
       originalPrice: 249000,
       discount: 20,
@@ -346,7 +368,7 @@ const mockData = {
     {
       id: "fs16",
       name: "BÌNH NHÁM GIỮ NHIỆT XANH DƯƠNG",
-      category: "Bao coffee",
+      category: "Café",
       currentPrice: 379000,
       originalPrice: 459000,
       discount: 17,
@@ -358,8 +380,8 @@ const mockData = {
   coffeeDaily: [
     {
       id: "cd1",
-      name: "Bao coffee Sữa Đá",
-      category: "Bao coffee",
+      name: "Café Sữa Đá",
+      category: "Café",
       price: 29000,
       image: "./public/c1.jpg",
       inStock: true,
@@ -367,15 +389,15 @@ const mockData = {
     {
       id: "cd2",
       name: "Bạc Xỉu Đá",
-      category: "Bao coffee",
+      category: "Café",
       price: 29000,
       image: "./public/c2.jpg",
       inStock: true,
     },
     {
       id: "cd3",
-      name: "Bao coffee Đen Đá",
-      category: "Bao coffee",
+      name: "Café Đen Đá",
+      category: "Café",
       price: 29000,
       image: "./public/c3.jpg",
       inStock: true,
@@ -383,7 +405,7 @@ const mockData = {
     {
       id: "cd4",
       name: "Cappuccino",
-      category: "Bao coffee",
+      category: "Café",
       price: 65000,
       image: "./public/c4.jpg",
       inStock: true,
@@ -391,7 +413,7 @@ const mockData = {
     {
       id: "cd5",
       name: "Americano",
-      category: "Bao coffee",
+      category: "Café",
       price: 45000,
       image: "./public/c5.jpg",
       inStock: true,
@@ -399,31 +421,31 @@ const mockData = {
     {
       id: "cd6",
       name: "Caramel Macchiato",
-      category: "Bao coffee",
+      category: "Café",
       price: 69000,
       image: "./public/c6.jpg",
       inStock: true,
     },
     {
       id: "cd7",
-      name: "Bao coffee Hạnh Nhân",
-      category: "Bao coffee",
+      name: "Café Hạnh Nhân",
+      category: "Café",
       price: 45000,
       image: "./public/c7.jpg",
       inStock: true,
     },
     {
       id: "cd8",
-      name: "Bao coffee Choco",
-      category: "Bao coffee",
+      name: "Café Choco",
+      category: "Café",
       price: 45000,
       image: "./public/c8.jpg",
       inStock: true,
     },
     {
       id: "cd9",
-      name: "Bao coffee Kem Sữa",
-      category: "Bao coffee",
+      name: "Café Kem Sữa",
+      category: "Café",
       price: 45000,
       image: "./public/c9.jpg",
       inStock: true,
@@ -431,7 +453,7 @@ const mockData = {
     {
       id: "cd10",
       name: "Mocha Đá",
-      category: "Bao coffee",
+      category: "Café",
       price: 69000,
       image: "./public/c10.jpg",
       inStock: true,
@@ -440,8 +462,8 @@ const mockData = {
   newProducts: [
     {
       id: "np1",
-      name: "Bao coffee Xoài Dừa",
-      category: "Bao coffee COFFEE",
+      name: "Café Xoài Dừa",
+      category: "Café COFFEE",
       price: 55000,
       image: "./public/img1.jpg",
       inStock: true,
@@ -449,7 +471,7 @@ const mockData = {
     {
       id: "np2",
       name: "Phan Sữa Dừa",
-      category: "Bao coffee COFFEE",
+      category: "Café COFFEE",
       price: 55000,
       image: "./public/img2.jpg",
       isNew: true,
@@ -458,7 +480,7 @@ const mockData = {
     {
       id: "np3",
       name: "Americano Nước Dừa",
-      category: "Bao coffee",
+      category: "Café",
       price: 55000,
       image: "./public/img3.jpg",
       isNew: true,
@@ -467,7 +489,7 @@ const mockData = {
     {
       id: "np4",
       name: "Cà Phê Freeze Dừa",
-      category: "Bao coffee",
+      category: "Café",
       price: 75000,
       image: "./public/img4.jpg",
       isNew: true,
@@ -476,7 +498,7 @@ const mockData = {
     {
       id: "np5",
       name: "Trà Sữa Mochi Đài Loan",
-      category: "Bao coffee",
+      category: "Café",
       price: 65000,
       image: "./public/img5.jpg",
       isNew: true,
@@ -730,6 +752,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const product = mockData.flashSale[actualIndex];
         if (product) {
           cart.addItem(product.id, product);
+  updateCartCount();
         }
       }
     }
@@ -762,7 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // New Products
   document
-    .querySelectorAll(".btn-add-cart:not(.flash):not(.coffee)")
+    .querySelectorAll(".btn-add-cart:not(.flash):not(.coffee):not(.detail-btn)")
     .forEach((button, index) => {
       button.addEventListener("click", function (e) {
         e.preventDefault();
@@ -783,21 +806,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const productId = productCard.dataset.productId;
       const productType = productCard.dataset.productType;
       // Redirect to product detail page instead of opening modal
+      if (!productId) return; // chặn undefined
+
       window.location.href = `product-detail.html?id=${productId}`;
     }
   });
 
   // Add click handlers for add to cart buttons (quick add)
   document.addEventListener("click", function (e) {
+    if (window.location.pathname.includes("product-detail")) return; // ✅ CHẶN
+
     if (e.target.closest(".btn-add-cart")) {
       e.preventDefault();
       e.stopPropagation();
 
       const productCard = e.target.closest(".product-card");
       const productId = productCard.dataset.productId;
-      const productType = productCard.dataset.productType;
 
-      const product = getProductById(productId, productType);
+      const product = getProductById(productId);
+
       if (product) {
         cart.addItem(product.id, product);
       }
@@ -1033,39 +1060,8 @@ function renderNewProducts() {
 }
 
 // Helper function to get product by ID
-function getProductById(productId, productType) {
-  // Convert productId to number for comparison
-  const numericId = parseInt(productId);
-
-  switch (productType) {
-    case "flashSale":
-      return mockData.flashSale.find((p) => {
-        const pId = parseInt(p.id.replace("fs", "")) + 100;
-        return pId === numericId;
-      });
-    case "coffeeDaily":
-      return mockData.coffeeDaily.find((p) => {
-        const pId = parseInt(p.id.replace("cd", "")) + 100;
-        return pId === numericId;
-      });
-    case "newProducts":
-      return mockData.newProducts.find((p) => {
-        const pId = parseInt(p.id.replace("np", "")) + 200;
-        return pId === numericId;
-      });
-    case "tea":
-      return teaFreezeData.find((p) => {
-        const pId = parseInt(p.id.replace("tea", "")) + 300;
-        return pId === numericId;
-      });
-    case "bakery":
-      return mockData.bakery.find((p) => {
-        const pId = parseInt(p.id.replace("bk", "")) + 400;
-        return pId === numericId;
-      });
-    default:
-      return null;
-  }
+function getProductById(productId) {
+  return window.products.find(p => p.id == productId);
 }
 
 // Modal functionality
@@ -1140,7 +1136,7 @@ function initModal() {
 }
 
 function openProductModal(productId, productType) {
-  const product = getProductById(productId, productType);
+  const product = getProductById(productId);
   if (!product) return;
 
   currentProduct = product;
@@ -1430,6 +1426,18 @@ function goToCheckout() {
 
   // Redirect to checkout page
   window.location.href = "cart.html";
+}
+
+//updateCartCount
+function updateCartCount() {
+  const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const total = cartData.reduce((sum, item) => sum + item.quantity, 0);
+
+  const cartCount = document.querySelector(".cart-count-quantity");
+  if (cartCount) {
+    cartCount.textContent = total;
+  }
 }
 
 // Export for use in other files

@@ -615,31 +615,23 @@
       function loadCartContent() {
         const cartContent = document.getElementById("cart-content");
 
-        // Check if cart exists, if not try to initialize from localStorage
-        let cart = window.cart;
-        if (!cart) {
-          // Try to get cart data from localStorage directly
-          const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-          if (cartData.length === 0) {
-            showEmptyCart();
-            return;
-          }
-          // Create a temporary cart object for display
-          cart = {
-            items: cartData,
-            getTotalPrice: function () {
-              return this.items.reduce(
-                (total, item) => total + item.price * item.quantity,
-                0
-              );
-            },
-          };
-        }
+        // LUÔN lấy từ localStorage
+        const cartData = JSON.parse(localStorage.getItem("cart")) || [];
 
-        if (!cart || cart.items.length === 0) {
+        if (cartData.length === 0) {
           showEmptyCart();
           return;
         }
+
+        const cart = {
+          items: cartData,
+          getTotalPrice: function () {
+            return this.items.reduce(
+              (total, item) => total + item.price * item.quantity,
+              0
+            );
+          },
+        };
 
         renderCartItems(cart);
       }
@@ -751,11 +743,23 @@
                             </div>
                             <div class="vat-note">(Đã bao gồm VAT nếu có)</div>
 
-                            <button class="checkout-btn" onclick="checkout()">Thanh toán</button>
+                            <button class="checkout-btn" onclick="goToCheckout()">Thanh toán</button>
                         </div>
                     </div>
                 </div>
             `;
+      }
+
+      function goToCheckout() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        if (cart.length === 0) {
+          alert("Giỏ hàng trống!");
+          return;
+        }
+
+        // chuyển trang
+        window.location.href = "checkout.html";
       }
 
       function updateQuantity(productId, quantity) {
@@ -854,32 +858,14 @@
         console.log("Cart count updated to:", totalItems);
       }
 
-      function removeItem(productId) {
-        console.log("removeItem called:", productId);
+      function removeItem(productId, size) {
+        console.log("removeItem:", productId, size);
 
-        // Always update localStorage directly for reliability
-        removeFromLocalStorageCart(productId);
+        removeFromLocalStorageCart(productId, size);
 
-        // Update cart object if it exists
-        if (window.cart && window.cart.removeItem) {
-          window.cart.removeItem(productId);
-        }
-
-        // Remove item from UI and update totals
-        const cartItem = document.querySelector(`[data-id="${productId}"]`);
-        if (cartItem) {
-          cartItem.remove();
-        }
-
-        // Update total price and cart count
-        updateTotalPrice();
+        // reload lại UI chuẩn nhất
+        loadCartContent();
         updateCartCount();
-
-        // Check if cart is empty and show empty state
-        const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-        if (cartData.length === 0) {
-          showEmptyCart();
-        }
       }
 
       function updateLocalStorageCart(productId, quantity) {
@@ -900,19 +886,14 @@
         }
       }
 
-      function removeFromLocalStorageCart(productId) {
+      function removeFromLocalStorageCart(productId, size) {
         let cartData = JSON.parse(localStorage.getItem("cart")) || [];
 
-        // Filter out item by ID (handle both string and number IDs)
         cartData = cartData.filter(
-          (item) => item.id != productId && item.id !== productId
+          (item) => !(item.id == productId && item.size == size)
         );
 
         localStorage.setItem("cart", JSON.stringify(cartData));
-      }
-
-      function checkout() {
-        window.location.href = "checkout.html";
       }
 
       function formatCurrency(amount) {

@@ -73,29 +73,25 @@ function getProductIdFromURL() {
 
 // Load product data
 function loadProductDetail() {
-  const productId = getProductIdFromURL();
+  const productId = parseInt(getProductIdFromURL());
+
+  console.log("ID:", productId); // đặt sau khi khai báo
 
   if (!productId) {
-    // Redirect to home if no product ID
-    window.location.href = "index.html";
+    console.error("Không có productId!");
     return;
   }
 
-  // Find product in products array
-  const product = products.find((p) => p.id === parseInt(productId));
+  const product = window.products.find((p) => p.id == productId);
+
+  console.log("Found product:", product); // debug thêm
 
   if (!product) {
-    // Redirect to home if product not found
-    window.location.href = "index.html";
-    return;
+    console.error("Không tìm thấy sản phẩm!");
+    return; // KHÔNG redirect nữa
   }
 
-  // Populate product details
   populateProductDetails(product);
-  loadProductDescription(product);
-  loadBakerySidebar();
-  loadSameCategoryProducts(product);
-  loadRelatedProducts(product.category);
 }
 
 // Populate product details in the page
@@ -164,6 +160,19 @@ function populateProductDetails(product) {
 
   // Store current product for cart operations
   window.currentProduct = product;
+
+  // ✅ Mặc định chọn size M
+  // ❌ remove hết active trước
+  document.querySelectorAll(".size-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  // ✅ rồi mới set M
+  const defaultBtn = document.querySelector('.size-btn[data-size="M"]');
+  if (defaultBtn) {
+    defaultBtn.classList.add("active");
+    updatePriceBySize("M");
+  }
 }
 
 // Get product description based on category
@@ -254,17 +263,14 @@ function decreaseQuantity() {
 }
 
 // Size selection
-function selectSize(size) {
-  // Remove active class from all size buttons
+function selectSize(size, element) {
   document.querySelectorAll(".size-btn").forEach((btn) => {
     btn.classList.remove("active");
   });
 
-  // Add active class to selected size
-  event.target.classList.add("active");
+  element.classList.add("active");
 
-  // Update price based on size (optional)
-  updatePriceBySize(size);
+  updatePriceBySize(size); // ✅ THÊM DÒNG NÀY
 }
 
 function updatePriceBySize(size) {
@@ -282,30 +288,56 @@ function updatePriceBySize(size) {
 
 // Add to cart from detail page
 function addToCartFromDetail() {
-  if (!window.currentProduct) return;
-
   const quantity = parseInt(document.getElementById("product-quantity").value);
-  const selectedSize =
-    document.querySelector(".size-btn.active")?.dataset.size || "M";
 
-  // Use cart instance if available
-  const cartInstance =
-    window.cart || (typeof cart !== "undefined" ? cart : null);
+  const selectedBtn = document.querySelector(".size-btn.active");
+  const selectedSize = selectedBtn ? selectedBtn.dataset.size : "M";
 
-  if (cartInstance && cartInstance.addItem) {
-    // Use the cart's addItem method with quantity
-    cartInstance.addItem(
-      window.currentProduct.id,
-      window.currentProduct,
-      quantity
-    );
-  } else {
-    // Fallback: add to localStorage directly with quantity
-    addToLocalStorageCartWithQuantity(window.currentProduct, quantity);
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = parseInt(urlParams.get("id"));
+
+  const product = window.products.find(p => p.id == productId);
+
+  if (!product) {
+    console.error("Không tìm thấy sản phẩm!");
+    return false;
   }
 
-  // Show success message
-  showNotification("Đã thêm sản phẩm vào giỏ hàng!", "success");
+  let price = product.price;
+  if (selectedSize === "L") price += 10000;
+
+  let cartData = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existingIndex = cartData.findIndex(
+    (item) => item.id == productId && item.size === selectedSize
+  );
+
+  if (existingIndex !== -1) {
+    cartData[existingIndex].quantity += quantity;
+  } else {
+    cartData.push({
+      id: productId,
+      name: product.name,
+      price,
+      size: selectedSize,
+      image: product.image,
+      category: product.category,
+      quantity
+    });
+  }
+
+  const cartInstance = window.cart;
+
+  if (cartInstance && cartInstance.addItem) {
+    cartInstance.addItem(productId + "-" + selectedSize, {
+      ...product,
+      name: `${product.name} (${selectedSize})`, // 👈 hiển thị luôn
+      price: price,
+      size: selectedSize // 👈 QUAN TRỌNG NHẤT
+    }, quantity);
+  }
+
+  return true;
 }
 
 // Fallback function to add to localStorage with specific quantity
@@ -344,11 +376,11 @@ function addToLocalStorageCartWithQuantity(product, quantity) {
 
 // Buy now function
 function buyNow() {
-  addToCartFromDetail();
-  // Redirect to cart page
-  setTimeout(() => {
+  const success = addToCartFromDetail();
+
+  if (success !== false) {
     window.location.href = "cart.html";
-  }, 500);
+  }
 }
 
 // Show notification
@@ -615,7 +647,7 @@ function initializePage() {
       // Coffee products
       {
         id: 101,
-        name: "Bao coffee Sữa Đá",
+        name: "phin Sữa Đá",
         category: "Cà phê",
         price: 29000,
         image: "./public/c1.jpg",
@@ -702,16 +734,16 @@ function initializePage() {
 
 // Try both DOMContentLoaded and window.onload
 document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(initializePage, 100);
-});
+  initializePage();
 
-window.addEventListener("load", function () {
-  setTimeout(initializePage, 100);
-
-  // Add event listeners for size buttons
   document.querySelectorAll(".size-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
-      selectSize(this.dataset.size);
+      selectSize(this.dataset.size, this); // ✅ thêm this
     });
   });
 });
+
+function getSelectedSize() {
+  const selected = document.querySelector(".size-btn.active");
+  return selected ? selected.textContent.trim() : "M";
+}
