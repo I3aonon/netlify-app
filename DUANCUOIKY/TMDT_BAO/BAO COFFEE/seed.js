@@ -2,10 +2,11 @@
 
 // kết nối DB
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "junction.proxy.rlwy.net",
   user: "root",
-  password: "root123",
-  database: "coffee_db"
+  password: "BEZKwAzTrxJIRhxlCirDWFrynccBfDoG",
+  database: "railway",
+  port: 11701
 });
 
 // DATA
