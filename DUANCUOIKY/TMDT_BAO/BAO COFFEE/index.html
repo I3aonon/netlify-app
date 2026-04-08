@@ -724,11 +724,11 @@
 
 <script>
 async function loadProducts() {
-    const res = await fetch("http://localhost:3000/products");
+    const res = await fetch("/products");
     const products = await res.json();
 
-    products.reverse();              // mới nhất lên đầu
-    const latestProducts = products.slice(0, 5); // lấy 5 sản phẩm
+    products.reverse();
+    const latestProducts = products.slice(0, 5);
 
     const container = document.getElementById("product-list");
     container.innerHTML = "";

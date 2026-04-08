@@ -205,7 +205,7 @@ function handleFormSubmission() {
     const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
     try {
-      const res = await fetch("http://localhost:3000/orders", {
+      const res = await fetch("/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
