@@ -98,4 +98,8 @@ app.put("/products/:id", (req, res) => {
 // thêm code
 app.use(express.static(__dirname));
 
-app.listen(3000, () => console.log("🚀 Server chạy 3000"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("🚀 Server chạy:", PORT);
+});
