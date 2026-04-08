@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bao coffee - Quản trị hệ thống</title>
@@ -148,6 +149,9 @@
     </div>
 
     <script>
+
+        const API = window.location.origin;
+
         // 1. Chuyển đổi Menu
         function showSection(section, e) {
             document.getElementById('products-section').style.display = section === 'products' ? 'block' : 'none';
@@ -173,7 +177,7 @@
         }
 
         async function renderProducts() {
-            const res = await fetch("http://localhost:3000/products");
+            const res = await fetch(API + "/products");
             const products = await res.json();
 
             const list = document.getElementById("admin-product-list");
@@ -202,7 +206,7 @@
 
             console.log("editingId set:", editingId);
 
-            fetch("http://localhost:3000/products")
+            fetch(API + "/products")
                 .then(res => res.json())
                 .then(products => {
                     const p = products.find(x => x.id == id); // 👈 đổi === thành ==
@@ -231,7 +235,7 @@
                 }
 
                 if (editingId !== null && !isNaN(editingId)) {
-                    const url = `http://localhost:3000/products/${editingId}`;
+                    const url = `${API}/products/${editingId}`;
                     console.log("CALL API:", url);
 
                     await fetch(url, {
@@ -243,7 +247,7 @@
                     alert("Đã cập nhật!");
                     editingId = null;
                 } else {
-                    await fetch("http://localhost:3000/products", {
+                    await fetch(API + "/products", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ name, price, image, category })
@@ -262,7 +266,7 @@
 
         // 3. Logic Đơn hàng (Lấy từ localStorage 'orders' nếu bạn đã làm chức năng Checkout)
 async function renderOrders() {
-    const res = await fetch("http://localhost:3000/orders");
+    const res = await fetch(API + "/orders");
     const orders = await res.json();
 
     const list = document.getElementById('admin-order-list');
@@ -296,7 +300,7 @@ async function renderOrders() {
     async function deleteProduct(id) {
     if (!confirm("Bạn chắc chắn muốn xóa?")) return;
 
-    await fetch(`http://localhost:3000/products/${id}`, {
+    await fetch(`${API}/products/${id}`, {
         method: "DELETE"
     });
 
@@ -313,7 +317,7 @@ document.getElementById("save-btn").addEventListener("click", function(e) {
 });
 
 async function renderRevenueChart() {
-    const res = await fetch("http://localhost:3000/orders");
+    const res = await fetch(API + "/orders");
     const orders = await res.json();
 
     // Tạo mảng 12 tháng
@@ -363,7 +367,7 @@ function drawChart(data) {
 
 // thống kê sản phẩm
 async function renderTopProducts() {
-    const res = await fetch("http://localhost:3000/orders");
+    const res = await fetch(API + "/orders");
     const orders = await res.json();
 
     const productMap = {};
@@ -409,11 +413,11 @@ async function renderTopProducts() {
 
 async function renderStats() {
     // lấy orders
-    const resOrders = await fetch("http://localhost:3000/orders");
+    const resOrders = await fetch(API + "/orders");
     const orders = await resOrders.json();
 
     // lấy products
-    const resProducts = await fetch("http://localhost:3000/products");
+    const resProducts = await fetch(API + "/products");
     const products = await resProducts.json();
 
     // 1. Tổng doanh thu
